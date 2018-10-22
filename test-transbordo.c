@@ -1,5 +1,6 @@
 #include <nSystem.h>
 #include "transbordo.h"
+#include "transbordo.c"
 
 int debugging= TRUE;
 int verificar, achacao, apargua;
