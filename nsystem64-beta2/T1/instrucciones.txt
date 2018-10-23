@@ -1,3 +1,4 @@
 export NSYSTEM=/home/rodro077/Dropbox/Cursos/CC4302/Tarea1CC4302/nsystem64-beta2
 gcc -c test-transbordo.c -I$NSYSTEM/include -I$NSYSTEM/src
 gcc test-transbordo.o $NSYSTEM/lib/libnSys.a -o test-transbordo
+

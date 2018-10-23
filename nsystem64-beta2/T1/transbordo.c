@@ -1,41 +1,41 @@
-#include <stdio.h>
 #include <nSystem.h>
 #include "fifoqueues.h"
-
-int nFerrys;
-
-typedef struct {
-  	int idFerry;
-} Ferry;
-
-typedef struct {
-	nCondition w;
-  	int idVehiculo;
-} Vehiculo;
+#include <stdio.h>
 
 typedef struct {
   nMonitor m;
-  FifoQueue colaVehiculos;
-  FifoQueue colaFerrys;
-} FerryCtrl;
+  FifoQueue q;
+  int *shipsarray;
+  int ships;
+} ShipControl;
 
-FerryCtrl *ctrlFerrysPargua;
-FerryCtrl *ctrlFerrysChacao;
+typedef struct {
+  int id;
+  nCondition w;
+} Vehicle;
 
-FerryCtrl *makeFerryCtrl() {
-	FerryCtrl *f= (FerryCtrl *)nMalloc(sizeof(*FerryCtrl));
-	f->m= nMakeMonitor();
-	f->colaVehiculos = MakeFifoQueue();
-	f->colaFerrys = MakeFifoQueue();
-	return f;
+int nships;
+
+ShipControl *makeSControl(int n) {
+    ShipControl *sc = (ShipControl *)nMalloc(sizeof(*sc));
+    sc->m= nMakeMonitor();
+    sc->q= MakeFifoQueue();
+    sc->shipsarray = (int *)nMalloc(sizeof(int)*nships);
+    sc->ships= n;
+    return sc;
 }
 
+ShipControl *scPargua;
+ShipControl *scChacao;
+
 void inicializar(int p) {
-  nFerrys = p;
-  ctrlFerrysChacao = makeFerryCtrl();
-  ctrlFerrysPargua = makeFerryCtrl();
+  nships = p;
+  scPargua = makeSControl(nships);
+  scChacao = makeSControl(0);
+  // Inicializa el array de 1's en Pargua para los barcos
   for (int i = 0; i < p; i++) {
-  	
+    scPargua->shipsarray[i] = 1;
+    scChacao->shipsarray[i] = 0;
   }
 }
 
